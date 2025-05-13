@@ -1,5 +1,6 @@
 {
   "name": "plot-js",
+  "type": "module",
   "version": "1.0.0",
   "description": "A JavaScript plotting library",
   "main": "index.js",
@@ -12,7 +13,5 @@
     "visualization"
   ],
   "author": "",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  "license": "MIT"
 }
