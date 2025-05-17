@@ -13,6 +13,7 @@
  * @param {string} options.title - Title of the graph
  * @param {string} options.xlab - label of x-axis
  * @param {string} options.ylab - label of y-axis
+ * @param {boolean} options.gridLines - to make gridlines visible
  */
 
 export function plotLineGraph(canvasID, yAxis, options = {}) {
@@ -28,14 +29,15 @@ export function plotLineGraph(canvasID, yAxis, options = {}) {
     xAxis: Array.from({ length: yAxis.length }, (_, i) => i + 1),
     color: "blue",
     backgroundColor: "#fff",
-    lineWidth: 2,
+    lineWidth: 4,
     pointRadius: 4,
     showPoint: true,
-    padding: 20,
+    padding: 40,
     gridColor: "#ccc",
     title: "",
     xlab: "",
     ylab: "",
+    gridLines: false,
   };
 
   const mergedOptions = { ...defaultOptions, ...options };
@@ -51,6 +53,7 @@ export function plotLineGraph(canvasID, yAxis, options = {}) {
     title,
     xlab,
     ylab,
+    gridLines,
   } = mergedOptions;
 
   if (xAxis.length != yAxis.length) {
@@ -86,6 +89,7 @@ export function plotLineGraph(canvasID, yAxis, options = {}) {
     padding -
     ((value - yMin) * plotHeight) / (yMax - yMin || 1);
 
+  //drawing gridliness
   ctx.strokeStyle = gridColor;
   ctx.lineWidth = 0.5;
 
@@ -93,14 +97,15 @@ export function plotLineGraph(canvasID, yAxis, options = {}) {
   for (let i = 0; i <= 5; i++) {
     const y = yMin + i * yStep;
     const canvasY = yScale(y);
-
-    ctx.beginPath();
-    ctx.moveTo(padding, canvasY);
-    ctx.lineTo(canvas.width - padding, canvasY);
-    ctx.stroke();
+    if (gridLines) {
+      ctx.beginPath();
+      ctx.moveTo(padding, canvasY);
+      ctx.lineTo(canvas.width - padding, canvasY);
+      ctx.stroke();
+    }
 
     //draw label for y axis
-    ctx.font = "12px Arial";
+    ctx.font = "12px Sans-Serif";
     ctx.fillStyle = "#000000";
     ctx.fillText(y.toFixed(1), padding - 5, canvasY + 4);
   }
@@ -110,12 +115,14 @@ export function plotLineGraph(canvasID, yAxis, options = {}) {
     const x = xMin + i * xStep;
     const canvasX = xScale(x);
 
-    ctx.beginPath();
-    ctx.moveTo(canvasX, canvas.height - padding);
-    ctx.lineTo(canvasX, padding);
-    ctx.stroke();
+    if (gridLines) {
+      ctx.beginPath();
+      ctx.moveTo(canvasX, canvas.height - padding);
+      ctx.lineTo(canvasX, padding);
+      ctx.stroke();
+    }
 
-    ctx.font = "12px Arial";
+    ctx.font = "12px Sans-Serif";
     ctx.fillStyle = "#000000";
     ctx.textAlign = "center";
     ctx.fillText(x.toFixed(1), canvasX, canvas.height - padding + 15);
